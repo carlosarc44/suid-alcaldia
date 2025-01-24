@@ -1,0 +1,1 @@
+{{Util::traerWidgetProceso($vigencia, $idRadicado)}}

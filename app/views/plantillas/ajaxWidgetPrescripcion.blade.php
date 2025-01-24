@@ -1,0 +1,1 @@
+{{Util::traerWidgetPrescripcion($vigencia, $idRadicado, $edicion)}}

@@ -1,0 +1,110 @@
+.date{
+	text-align: center;
+  color: #737373 !important;
+}
+
+.timelineProgress {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  background: #fefefe;
+  color:#6e6e6e;
+  border-top: 1px solid #dcdcdc;
+  border-left: 1px solid #dcdcdc;
+  border-right: 1px solid #dcdcdc;
+  overflow-x: auto;
+	padding-left: 10px;
+}
+
+.li {
+  transition: all 200ms ease-in;
+  height: auto;
+}
+
+.timestamp {
+  margin-bottom: 15px;
+  padding: 0px 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 100;
+  font-size: 11px;
+  margin-top:6px;
+  height: 35px;
+}
+.status {
+  padding: 1px;
+  display: flex;
+  justify-content: center;
+  border-top: 2px solid #D6DCE0;
+  position: relative;
+  transition: all 200ms ease-in;
+  width: 120px;
+}
+.status h4 {
+  font-weight: 400;
+  font-size:0.8em !important;
+}
+.status:before {
+  content: "";
+  width: 25px;
+  height: 25px;
+  background-color: white;
+  border-radius: 25px;
+  border: 1px solid #ddd;
+  position: absolute;
+  top: -15px;
+  left: 35%;
+  transition: all 200ms ease-in;
+}
+.li.complete .status {
+  border-top: 2px solid #03d47d;
+}
+.li.complete .status:before {
+  background-color: #03d47d;
+  border: none;
+  transition: all 200ms ease-in;
+}
+.li.complete .status h4 {
+  color: #03d47d;
+}
+.li.actual .status {
+  border-top: 2px solid #ffc107;
+}
+.li.actual .status:before {
+  background-color: #ffc107;
+  border: none;
+  transition: all 200ms ease-in;
+}
+.li.actual .status h4 {
+  color: #ffc107;
+}
+.check {
+	position: absolute;
+    top: 38px;
+    z-index: 1;
+    font-size: 1.3em;
+    left: 47px;
+	color:#fff
+}
+
+@media (min-device-width: 320px) and (max-device-width: 700px) {
+  .timelineProgress {
+    list-style-type: none;
+    display: block;
+  }
+
+  .li {
+    transition: all 200ms ease-in;
+    display: flex;
+    width: inherit;
+  }
+  .timestamp {
+    width: 100px;
+  }
+  .status:before {
+    left: -8%;
+    top: 30%;
+    transition: all 200ms ease-in;
+  }
+}
