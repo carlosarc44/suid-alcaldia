@@ -1463,6 +1463,12 @@ function caratula(idQueja) {
   window.location.href = rutaRedirect + '/' + idQueja;
 }
 
+//Portada
+function portada(vigencia, idProceso) {
+  const rutaRedirect = base_url + '/procesos/portada';
+  window.location.href = rutaRedirect + "/" + vigencia + "/" + idProceso;
+}
+
 function editarQueja(idQueja, multiples) {
   const ruta = base_url + '/quejas/editarQueja';
 

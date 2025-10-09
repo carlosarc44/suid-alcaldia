@@ -687,7 +687,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            traerFase({{ $fase . ', ' . $proceso[0]->vigencia . ', ' . $proceso[0]->idRadicado }}, 1)
+            traerFase({{ ($fase != NULL ? $fase : 0).', '.$proceso[0]->vigencia.', '.$proceso[0]->idRadicado }}, 1)
             //cargarAutosEspeciales()
 
             var quejas = "<?php echo json_encode($numerosQuejas); ?>";
@@ -1317,12 +1317,6 @@
                     alertify.error("Error #1149");
                 }
             });
-        }
-
-        //Portada
-        function portada(vigencia, idProceso) {
-            var rutaRedirect = "{{ URL::to('procesos/portada/') }}";
-            window.location.href = rutaRedirect + "/" + vigencia + "/" + idProceso;
         }
 
         //CargarCiudad

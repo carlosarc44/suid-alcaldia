@@ -114,7 +114,12 @@
                                             este proceso</b>
                                     </a>
                                 @endif
-                            @endif
+                            @endif                  
+                            <br>
+                            <a class="btn btn-app" onclick="portada('{{ $proceso[0]->vigencia }}', '{{ $proceso[0]->idRadicado }}');" style="padding:10px 5px 20px 5px">
+                                <i class="fa fa-file-word-o" style="font-size:28px"></i> Generar Portada del Proceso
+                            </a>
+
                         </div>
                     </div>
 
@@ -138,8 +143,8 @@
                                 <div class="box-body">
                                     <!-- row -->
                                     <div class="row">
-                                        <!-- col-md-6 -->
-                                        <div class="col-md-6">
+                                        <!-- col-md-5 -->
+                                        <div class="col-md-5">
                                             <!-- presuntos responsables-->
                                             <div class="box box-danger">
                                                 <div class="box-body">
@@ -205,10 +210,10 @@
                                             </div>
                                             <!-- # presuntos responsables-->
                                         </div>
-                                        <!-- col-md-6 -->
+                                        <!-- col-md-5 -->
 
-                                        <!-- col-md-6 -->
-                                        <div class="col-md-6">
+                                        <!-- col-md-5 -->
+                                        <div class="col-md-5">
                                             <!-- quejosos-->
                                             <div class="box box-success">
                                                 <div class="box-body">
@@ -272,7 +277,13 @@
                                             </div>
                                             <!-- # quejosos-->
                                         </div>
-                                        <!-- col-md-6 -->
+                                        <!-- col-md-5 -->
+
+                                        <div class="col-md-2">
+                                            <a class="btn btn-app" href="javascript: void(0)" onclick="caratula({{$numeroQueja}});">
+                                                <i class="fa  fa-file-word-o"></i> Carátula
+                                            </a>
+                                        </div>
                                     </div>
                                     <!-- # row -->
 
@@ -506,7 +517,7 @@
                         <!-- /.tab-pane -->
 
                         <div class="tab-pane" id="tab_2">
-                            @if ($documentoAbogado == Session::get('documentoUsuario') || Session::get('perfilUsuario') == 2)
+                            @if ($documentoAbogado == Session::get('documentoUsuario') || Session::get('perfilUsuario') == 2 || Session::get('perfilUsuario') == 5)
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="row"

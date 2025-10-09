@@ -159,6 +159,9 @@
 
                 <div class="col-md-4">
                     {{ Util::traerWidgetProceso($proceso[0]->vigencia, $proceso[0]->idRadicado) }}                    
+                    <a class="btn btn-app" onclick="portada('{{ $proceso[0]->vigencia }}', '{{ $proceso[0]->idRadicado }}');" style="padding:10px 5px 20px 5px">
+                        <i class="fa fa-file-word-o" style="font-size:28px"></i> Generar Portada del Proceso
+                    </a>
                 </div>
 
                 <div class="col-md-4">
@@ -543,7 +546,7 @@
                         <!-- /.tab-pane -->
 
                         <div class="tab-pane" id="tab_2">
-                            @if ($documentoAbogado == Session::get('documentoUsuario') || Session::get('perfilUsuario') == 2)
+                            @if ($documentoAbogado == Session::get('documentoUsuario') || Session::get('perfilUsuario') == 2 || Session::get('perfilUsuario') == 5)
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="row"

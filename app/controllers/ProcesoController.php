@@ -2116,7 +2116,7 @@ class ProcesoController extends \BaseController
 			$fileExt = end($trozos);
 
 			//Ruta del archivo donde se guardará
-			$path = "\procesos\\".Input::get('vigencia')."-".Input::get('idRadicado')."\\".$nombreEtapa."\\".$nombreTipoArchivo."\\";
+			$path = "\procesos\\".Input::get('vigencia')."-".Input::get('idRadicado')."\\".Input::get("idEtapa")."\\".$nombreTipoArchivo."\\";
 
 			//Si no exite la carpeta la crea
 			if (!file_exists(public_path().$path))
@@ -2293,7 +2293,7 @@ class ProcesoController extends \BaseController
 			$fileExt = end($trozos);
 
 			//Ruta del archivo donde se guardará
-			$path = "\procesos\\".$vig[0]."-".$rad[0]."\\".$nombreEtapa."\\".$nombreTipoArchivo."\\";
+			$path = "\procesos\\".$vig[0]."-".$rad[0]."\\".Input::get("etapa")."\\".$nombreTipoArchivo."\\";
 
 			//Si no exite la carpeta la crea
 			if (!file_exists(public_path().$path))
@@ -2426,7 +2426,7 @@ class ProcesoController extends \BaseController
 			$fileExt = end($trozos);
 
 			//Ruta del archivo donde se guardará
-			$path = "\procesos\\".Input::get('vigencia')."-".Input::get('idRadicado')."\\".$nombreEtapa."\\".$nombreTipoArchivo."\\";
+			$path = "\procesos\\".Input::get('vigencia')."-".Input::get('idRadicado')."\\".Input::get("idEtapa")."\\".$nombreTipoArchivo."\\";
 
 			//Si no exite la carpeta la crea
 			if (!file_exists(public_path().$path))
@@ -2605,7 +2605,7 @@ class ProcesoController extends \BaseController
 				$nombreTipoArchivo = "DOCUMENTO EXTERNO";
 				break;
 			case '9':
-				$nombreTipoArchivo = "QUEJA O INFORME";
+				$nombreTipoArchivo = "QUEJAS O INFORMES";
 				break;
 			case '10':
 				$nombreTipoArchivo = "CONSTANCIAS SECRETARIALES";
@@ -2615,8 +2615,7 @@ class ProcesoController extends \BaseController
 				break;
 		}
 
-
-		$filename = 'procesos\\'.$archivo->Radicado_vigencia."-".$archivo->Radicado_idRadicado."\\".$nombreEtapa."\\".$nombreTipoArchivo."\\".utf8_decode($archivo->nombreArchivo);
+		$filename = 'procesos\\'.$archivo->Radicado_vigencia."-".$archivo->Radicado_idRadicado."\\".$archivo->Etapa_idEtapa."\\".$nombreTipoArchivo."\\".utf8_decode($archivo->nombreArchivo);
 
 		$path = public_path($filename);
 
@@ -5257,6 +5256,7 @@ class ProcesoController extends \BaseController
 				$titulo = "Segunda Instancia";
 			    break;
 			default:
+				$titulo = "F..";
 				break;
 		}
 
