@@ -2,6 +2,7 @@
 /vendor
 /public/img/fotos
 /public/procesos
+/public/realtime/node_modules
 composer.phar
 composer.lock
 .env.*.php
