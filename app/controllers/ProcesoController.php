@@ -939,6 +939,124 @@ class ProcesoController extends \BaseController
 
 	public function actionGuardarOficioRemision($vector)
 	{
+		$datos     = json_decode($vector, true);
+		$idUsuario = Session::get('documentoUsuario');
+		$fechaHoy  = date("Y-m-d");
+
+		// Actualiza el estado de la queja
+		DB::table('queja')
+			->where('idQueja', $datos['idQueja'])
+			->update(['EstadoQueja_idEstadoQueja' => 4]); // 4 Queja remitida por competencia
+
+		// Almacena ObservacionesQueja
+		$observacionQueja = new ObservacionQueja;
+		$observacionQueja->EstadoQueja_idEstadoQueja = 4;
+		$observacionQueja->Queja_idQueja             = $datos['idQueja'];
+		$observacionQueja->Persona_documentoPersona  = $idUsuario;
+		$observacionQueja->observacion               =
+			"Se remite por competencia la queja ".$datos['idQueja']." a ".$datos['destinatario'].
+			" en la entidad: ".$datos['entidad'];
+		$observacionQueja->fechaObservacion          = $fechaHoy;
+		$observacionQueja->horaObservacion           = date('g:i a');
+		$observacionQueja->save();
+
+		// Tipo de plantilla
+		switch ($datos['tipoRemision']) {
+			case '1':
+				$nombrePlantilla = "Remision por Competencia - Entidad";
+				break;
+			case '2':
+				$nombrePlantilla = "Remision por Competencia - Comite Convivencia Laboral";
+				break;
+			case '3':
+				$nombrePlantilla = "Remision por Competencia - Devolucion";
+				break;
+			default:
+				$nombrePlantilla = "Remision por Competencia";
+		}
+
+		// Ciudad
+		$ciudad       = Ciudad::find($datos['ciudad']);
+		$nombreCiudad = $ciudad->nombreCiudad;
+
+		// Director
+		$director = Util::traerNombreDirector();
+
+		// Asunto
+		$remisionCompetencia = DB::table('remisioncompetencia')
+			->where('vigenciaRemision', '=', date('Y'))
+			->max('idRemisionCompetencia');
+
+		$asunto = "Remisión RXC - ".$remisionCompetencia."/".date('Y').
+				" ".$datos['origenQueja']." ".$datos['idQueja'];
+
+		$valores    = Util::almacenarOficio(
+			$datos['destinatario'],
+			$datos['entidad'],
+			$datos['direccion'],
+			$datos['ciudad'],
+			$asunto,
+			$datos['origenQueja']." ".$datos['idQueja']
+		);
+		$numeroCdi  = $valores[0];
+		$numeroArco = $valores[1];
+
+		$remision = new RemisionCompetencia;
+		$remision->vigenciaRemision                 = date("Y");
+		$remision->Queja_idQueja                    = $datos['idQueja'];
+		$remision->TipoRemision_idTipoRemision      = $datos['tipoRemision'];
+		$remision->EntidadRemision_idEntidadRemision= $datos['idEntidadSeleccionada'];
+		$remision->motivoRemisionCompetencia        = $datos['motivo'];
+		$remision->fechaRemisionCompetencia         = $fechaHoy;
+		$remision->oficioRemisionCompetencia        = $numeroCdi." ARCO ".$numeroArco;
+		$remision->save();
+
+		// -------- PLANTILLA WORD --------
+		$templatePath = 'plantillas/remisiones/'.$nombrePlantilla.'.docx';
+		$templateWord = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+
+		$escapar = function ($str) {
+			return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+		};
+
+		$templateWord->setValue('numeroOficio', $numeroCdi);
+		$templateWord->setValue('numeroArco',   $numeroArco);
+		$templateWord->setValue('fechaHoy',     Util::formatearFecha(date('Y-m-d')));
+		$templateWord->setValue('destinatario', $escapar($datos['destinatario']));
+		$templateWord->setValue('direccion',    $escapar($datos['direccion']));
+		$templateWord->setValue('ciudad',       $escapar($nombreCiudad));
+		$templateWord->setValue('asunto',       $escapar($asunto));
+		$templateWord->setValue('director',     $escapar($director)); // evita que & y otros rompan el XML[web:107][web:113]
+
+		// Guardar en archivo temporal
+		$tempFile = tempnam(sys_get_temp_dir(), 'remision_');
+		$templateWord->saveAs($tempFile); // DOCX válido en disco[web:33]
+
+		// Limpiar salida previa
+		if (ob_get_length()) {
+			ob_end_clean();
+		}
+
+		$downloadName = $nombrePlantilla.' '.$datos['idQueja'].'.docx';
+
+		// Cabeceras correctas para DOCX
+		header('Content-Description: File Transfer');
+		header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+		header('Content-Disposition: attachment; filename="'.$downloadName.'"');
+		header('Content-Transfer-Encoding: binary');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		header('Content-Length: '.filesize($tempFile));
+
+		// Enviar archivo y eliminar temporal
+		readfile($tempFile); // salida binaria segura[web:27]
+		unlink($tempFile);
+		exit;
+	}
+
+	public function actionGuardarOficioRemision_OLD($vector)
+	{
 		$datos = json_decode($vector, true);
 
 		$idUsuario = Session::get('documentoUsuario');
@@ -1008,15 +1126,19 @@ class ProcesoController extends \BaseController
         //********** PLANTILLA WORD ***************************
         $templateWord = new \PhpOffice\PhpWord\TemplateProcessor('plantillas/remisiones/'.$nombrePlantilla.'.docx');
 
+		$escapar = function ($str) {
+			return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+		};
+
         // --- Asignamos valores a la plantilla
 		$templateWord->setValue('numeroOficio', $numeroCdi);
 		$templateWord->setValue('numeroArco', $numeroArco);
-		$templateWord->setValue('fechaHoy', Util::formatearFecha(date('Y-m-d')));
-		$templateWord->setValue('destinatario', $datos['destinatario']);
-		$templateWord->setValue('direccion', $datos['direccion']);
-		$templateWord->setValue('ciudad', $nombreCiudad);
-		$templateWord->setValue('asunto', $asunto);
-		$templateWord->setValue('director', $director);
+		$templateWord->setValue('fechaHoy', Util::formatearFecha(date('Y-m-d')));		
+		$templateWord->setValue('destinatario', $escapar($datos['destinatario']));
+		$templateWord->setValue('direccion',   $escapar($datos['direccion'])); // aquí va "Cll 21 21-49 Ed. Millán & Asociados"
+		$templateWord->setValue('ciudad',      $escapar($nombreCiudad));
+		$templateWord->setValue('asunto',      $escapar($asunto));
+		$templateWord->setValue('director',    $escapar($director));
 
 		// --- Se guarda el documento
 		$templateWord->saveAs($nombrePlantilla.' '.$datos["idQueja"].'.docx');

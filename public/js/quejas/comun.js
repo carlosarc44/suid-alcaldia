@@ -1665,15 +1665,13 @@ function validarRemitirQueja(origenQueja, idQueja) {
 
   window.location.href = rutaRedirect + '/' + vector;
 
-  var rutaRedirect = base_url + '/index';
-
+  alertify.success('Se está generando la remisión.  Un momento por favor..');
+  
   setTimeout(function () {
-    window.location.href = rutaRedirect;
-  }, 2000);
-  playAudio('alert');
-
-  var ruta2 = base_url + '/inicio';
-  window.location.href = ruta2;
+    playAudio('alert');
+    alertify.success('Se generó la remisión en Word correctamente.');    
+    window.location.reload(); 
+  }, 5000);
 }
 
 function validarAcumularQueja(idQueja) {

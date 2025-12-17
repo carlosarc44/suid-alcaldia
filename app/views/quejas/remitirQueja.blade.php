@@ -78,7 +78,7 @@
 					    <div id="resultadoDestino">    
 					        <div class="row">
 					          	<div class="col-xs-5 col-xs-offset-1">
-					            	<strong><input type="text" class="form-control" id="destinatario" placeholder="Destinatario" style="padding-left:2px; text-transform: uppercase;" readonly/></strong>
+					            	<strong><input type="text" class="form-control" id="destinatario" placeholder="Destinatario" style="padding-left:2px; text-transform: uppercase;"/></strong>
 					          	</div>
 					          	<div class="col-xs-3">
 					            	<span class="tituloAyuda">Destinatario</span>
