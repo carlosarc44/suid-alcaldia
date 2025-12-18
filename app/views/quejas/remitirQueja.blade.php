@@ -106,7 +106,7 @@
 			          		<div class="row">
 			            		<div class="col-md-5 col-xs-offset-1">   
 			                		{{ Form::select('departamento', array('default' => 'Departamento') + $lista_departamentos, 
-			                   		null, array('class' => 'form-control', 'id'=>'departamento', 'onchange' => 'cargarCiudad(this.value)', 'style'=>'color:#696969; padding-left:0; width:100%;', 'onchange' => 'cargarCiudad(this.value)')) }}
+			                   		null, array('class' => 'form-control', 'id'=>'departamento', 'onchange' => 'cargarCiudadRemision(this.value)', 'style'=>'color:#696969; padding-left:0; width:100%;')) }}
 			            		</div>
 			            		<div class="col-xs-4">
 			              			<span class="tituloAyuda">Departamento de destino</span>
@@ -183,7 +183,7 @@
 						            <tbody>
 						           		@foreach ($entidades as $entidad)							
 											<tr>
-												<td><b><a href="javascript: void(0)" style="color:#000;" onclick="fijarDestinatarioEnt('{{ $entidad->idEntidadRemision }}')">{{ $entidad->nombreEncargado }}</a></b></td>
+												<td><b><a href="javascript: void(0)" style="color:#000;" onclick="fijarDestinatarioEntRemision('{{ $entidad->idEntidadRemision }}')">{{ $entidad->nombreEncargado }}</a></b></td>
 												<td>{{ $entidad->nombreEntidad }}</td>		
 												<td>{{ $entidad->direccionEntidad }}</td>
 											</tr>
@@ -251,65 +251,10 @@
 @stop
 	<!--scriptsFin-->
 @section('scriptsFin') 
+<script src="{{ asset('js/quejas/comun.js') }}"></script>
 <script>
 $(document).ready(function() {
-    $('#tablaEntidades').DataTable();
+	initRemisionQuejas();
 });
-
-//CargarCiudad
-function cargarCiudad(idDepartamento)
-{ 
-	if(idDepartamento != 'default')
-	{
-	    var loader = '<img src="{{ asset("img/loading.gif") }}">'; 
-		var ruta = "{{URL::to('procesos/cargarCiudad/')}}";
-	    var parametros = {"idDepartamento" : idDepartamento};
-	      
-	    $.ajax({                
-	            data:  parametros,
-	            url:   ruta,
-	            type:  'post',
-	            success:  function (responseText) { 
-	            	$('#resultadoCargarCiudad').html(responseText); 
-	            	//Initialize Select2 Elements
-					$(".select2").select2();  
-	            },
-	            error: function (responseText) {
-	            	playAudio('fail');
-	              	alertify.error("Error /#870");
-	            }
-	    });	
-    }
-}
-
-function fijarDestinatarioEnt(idEntidad)
-{
-	$("#idEntidadSeleccionada").val(idEntidad);
-
-	var loader = '<img src="{{ asset("img/loading.gif") }}">';  
-
-	var ruta = "{{URL::to('procesos/fijarDestinatarioEntRem/')}}";
-
-    var parametros = { 
-        "idEntidad" : idEntidad
-      };
-      
-    $.ajax({                
-            data:  parametros,
-            url:   ruta,
-            type:  'post',
-            beforeSend: function(responseText) {
-			    $('#resultadoDestino').html('<p style="margin-top:10px; width:100%; text-align:center;">' +loader + '</p>');
-			},
-            success:  function (responseText) { 
-            	$('#resultadoDestino').html(responseText); 
-            	//Initialize Select2 Elements
-				$(".select2").select2();               
-            },
-            error: function (responseText) {
-              	alertify.error("Error /#878");
-            }
-    });	
-}
 </script>
 @stop
