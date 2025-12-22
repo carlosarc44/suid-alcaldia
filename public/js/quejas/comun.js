@@ -1791,7 +1791,7 @@ function oficioGeneral() {
       $('#tablaPersonas').DataTable();
       //Tabla entidades
       $('#tablaEntidades').DataTable();
-
+      
       //Suelta tecla
       $('#docPersona').keyup(function (e) {
         clearTimeout($.data(this, 'timer'));
@@ -2272,4 +2272,82 @@ function cargarProcesosActivosEtapa(idEtapa) {
       errorAjax(responseText);
     },
   });
+}
+
+// ===== FUNCIONES ESPECÍFICAS PARA REMISIÓN DE QUEJAS =====
+
+function initRemisionQuejas() {
+  $('#tablaEntidades').DataTable({
+    pageLength: 100,
+    searching: false,
+    columnDefs: [
+      {
+        targets: 0,
+        orderable: false
+      }
+    ]
+  });
+  
+  // Delegación de eventos para los enlaces
+  $('#tablaEntidades').on('click', 'a[onclick*="fijarDestinatarioEnt"]', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Extraer el ID de la función onclick
+    var onclick = $(this).attr('onclick');
+    var idEntidad = onclick.match(/'([^']+)'/)[1];
+    
+    fijarDestinatarioEntRemision(idEntidad);
+    
+    return false;
+  });
+}
+
+function cargarCiudadRemision(idDepartamento) { 
+  if(idDepartamento != 'default') {
+    var ruta = base_url + '/procesos/cargarCiudad';
+    var parametros = {"idDepartamento" : idDepartamento};
+      
+    $.ajax({                
+      data:  parametros,
+      url:   ruta,
+      type:  'post',
+      success:  function (responseText) { 
+        $('#resultadoCargarCiudad').html(responseText); 
+        //Initialize Select2 Elements
+        $(".select2").select2();  
+      },
+      error: function (responseText) {
+        playAudio('fail');
+        alertify.error("Error /#870");
+      }
+    });	
+  }
+}
+
+function fijarDestinatarioEntRemision(idEntidad) {
+  $("#idEntidadSeleccionada").val(idEntidad);
+
+  var ruta = base_url + '/procesos/fijarDestinatarioEntRem';
+
+  var parametros = { 
+    "idEntidad" : idEntidad
+  };
+      
+  $.ajax({                
+    data:  parametros,
+    url:   ruta,
+    type:  'post',
+    beforeSend: function(responseText) {
+      $('#resultadoDestino').html('<p style="margin-top:10px; width:100%; text-align:center;">' + loader + '</p>');
+    },
+    success:  function (responseText) { 
+      $('#resultadoDestino').html(responseText); 
+      //Initialize Select2 Elements
+      $(".select2").select2();               
+    },
+    error: function (responseText) {
+      alertify.error("Error /#878");
+    }
+  });	
 }
