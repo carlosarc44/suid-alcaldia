@@ -788,7 +788,7 @@ class QuejaController extends \BaseController
 	   	$quejas = DB::table('queja')
 						->join('origenqueja', 'queja.OrigenQueja_idOrigenQueja', '=', 'origenqueja.idOrigenQueja')
 						->where('queja.EstadoQueja_idEstadoQueja', '=', 1)//1 Queja radicada
-						->orderBy('queja.idQueja', 'desc')
+						->orderBy('queja.idQueja', 'asc')
 						->get();
 
   		return View::make('quejas.quejasEnviar')
@@ -1054,7 +1054,7 @@ class QuejaController extends \BaseController
 	   	$quejas = DB::table('queja')
 						->join('origenqueja', 'queja.OrigenQueja_idOrigenQueja', '=', 'origenqueja.idOrigenQueja')
 						->where('queja.EstadoQueja_idEstadoQueja', '=', 5)//5 Queja enviada a reparto
-						->orderBy('queja.idQueja', 'desc')
+						->orderBy('queja.idQueja', 'asc')
 						->get();
 
 		$abogados = DB::table('abogado')
