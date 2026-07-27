@@ -1,5 +1,9 @@
 //var socket = io.connect('http://127.0.0.1:3000');
-var socket = io.connect('http://181.143.243.206:3000');
+//var socket = io.connect('https://suid.manizales.gov.co');
+var socket = io('https://suid.manizales.gov.co', {
+    path: '/socket.io',
+    transports: ['polling'] // sin 'websocket'
+});
  
 //al actualizar la página eliminamos la sesión del usuario de sessionStorage
 /*$(document).ready(function()

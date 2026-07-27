@@ -647,7 +647,7 @@
 
 <!-- Socket io 
 <script src="http://127.0.0.1:3000/socket.io/socket.io.js"></script>-->
-<script src="http://181.143.243.206:3000/socket.io/socket.io.js"></script>
+<script src="https://suid.manizales.gov.co/socket.io/socket.io.js"></script>
 <!-- #Socket io -->
 <script src="{{ asset('realtime/listens_realtime.js') }}"></script>
 
