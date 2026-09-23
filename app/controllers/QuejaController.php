@@ -496,10 +496,12 @@ class QuejaController extends \BaseController
 						
 					if(count($preResp) == 0)
 					{
+						/*
 						//Elimina el funcionario
 						DB::table('funcionario')
 						->where('idFuncionario', $idFuncionario)
 						->delete();
+						*/
 					}
 
 				//3- Eliminar la persona actual (Si no se encuentra como quejoso en otras quejas)
@@ -509,9 +511,11 @@ class QuejaController extends \BaseController
 		
 					if(count($quejosos) == 0)
 					{
+						/*
 						DB::table('persona')
 						  ->where('documentoPersona', Input::get('documentoPersona'))
 						 ->delete();
+						 */
 					}
 
 
@@ -670,9 +674,11 @@ class QuejaController extends \BaseController
 		if(count($preResp) == 0)
 		{
 			//Elimina el funcionario
+			/*
 			DB::table('funcionario')
 			  ->where('idFuncionario', $idFuncionario)
 			 ->delete();
+			 */
 		}
 
 		//3- Eliminar la persona actual (Si no se encuentra como quejoso en otras quejas)
@@ -682,9 +688,11 @@ class QuejaController extends \BaseController
 
 		if(count($quejosos) == 0)
 		{
+			/*
 			DB::table('persona')
 			  ->where('documentoPersona', Input::get('documentoPersona'))
 			 ->delete();
+			 */
 		}
 
 		return;
